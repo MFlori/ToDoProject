@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import todo.todoproject.entity.Task;
 import todo.todoproject.repository.TaskRepository;
+import todo.todoproject.secureInput.SecureInput;
 
 import java.util.List;
 
@@ -23,7 +24,13 @@ public class TaskController {
     @CrossOrigin
     @PostMapping("/tasks")
     Task newTask(@RequestBody Task newTask) {
-        System.out.println("new task saved");
+        SecureInput.checkInput(newTask); //checking for html input and removing char '<'
         return taskRepository.save(newTask);
+    }
+
+    @CrossOrigin
+    @DeleteMapping("/tasks/{id}")
+    public void deleteTask (@PathVariable(name="id") Long id){
+        taskRepository.deleteById(id);
     }
 }
