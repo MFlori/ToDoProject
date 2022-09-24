@@ -7,6 +7,7 @@ import todo.todoproject.repository.TaskRepository;
 import todo.todoproject.secureInput.SecureInput;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 public class TaskController {
@@ -18,6 +19,10 @@ public class TaskController {
     @CrossOrigin
     @GetMapping("/tasks")
     public List<Task> getAllTasks() {
+        for(Task task : taskRepository.findAll()){
+            System.out.println(task);
+        }
+
         return taskRepository.findAll();
     }
 
@@ -30,7 +35,7 @@ public class TaskController {
 
     @CrossOrigin
     @DeleteMapping("/tasks/{id}")
-    public void deleteTask (@PathVariable(name="id") Long id){
+    public void deleteTask (@PathVariable(name="id") UUID id){
         taskRepository.deleteById(id);
     }
 }

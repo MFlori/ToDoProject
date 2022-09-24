@@ -4,6 +4,8 @@ import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.io.Serializable;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -11,10 +13,11 @@ import javax.persistence.*;
 @RequiredArgsConstructor
 @Entity
 @Table(name="tasks")
-public class Task {
+public class Task implements Serializable {
     @Id
-    @GeneratedValue(strategy= GenerationType.SEQUENCE)
-    @Column(name="idtasks") private long id;
+    @GeneratedValue(generator = "u")
+    @GenericGenerator(name = "u", strategy = "org.hibernate.id.UUIDGenerator")
+    @Column(name="idtasks", columnDefinition = "BINARY(16)") private UUID id;
     @Column(name="task") private String task;
     @Column(name="notes") private String notes;
     @Column(name="status") private boolean status;
