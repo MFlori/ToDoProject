@@ -6,11 +6,7 @@ import todo.todoproject.entity.Task;
 import todo.todoproject.repository.TaskRepository;
 import todo.todoproject.secureInput.SecureInput;
 
-import java.text.SimpleDateFormat;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 public class TaskController {
@@ -38,8 +34,21 @@ public class TaskController {
     }
 
     @CrossOrigin
-    @DeleteMapping("/tasks/{id}")
+    @DeleteMapping("tasks/delete/{id}")
     public void deleteTask (@PathVariable(name="id") UUID id){
         taskRepository.deleteById(id);
     }
+
+
+    @CrossOrigin
+    @PutMapping("tasks/update/{id}")
+    public Task updateTask (@PathVariable(name="id") UUID id, @RequestBody Task newTask){
+        Task updatedTask = taskRepository.findById(id).get();
+        updatedTask.setTask(newTask.getTask());
+        updatedTask.setNotes(newTask.getNotes());
+        updatedTask.setStatus(newTask.isStatus());
+
+        return taskRepository.save(updatedTask);
+        }
+
 }
