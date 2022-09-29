@@ -15,13 +15,17 @@ import java.util.UUID;
 @Table(name="tasks")
 public class Task implements Serializable , Comparable<Task>{
     @Id
-    @GeneratedValue(generator = "u")
-    @GenericGenerator(name = "u", strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(name="idtasks", columnDefinition = "BINARY(16)") private UUID id;
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    @Column(name="id", columnDefinition = "BINARY(16)") private UUID id;
     @Column(name="task") private String task;
     @Column(name="notes") private String notes;
     @Column(name="status") private boolean status;
     @Column(name="dateCreated") private Date dateCreated;
+    @ManyToOne
+    @JoinColumn(name = "fk_user") private User user;
+
+
 
     @Override
     public int compareTo(Task o) {

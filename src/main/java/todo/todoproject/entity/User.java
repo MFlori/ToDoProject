@@ -1,7 +1,11 @@
 package todo.todoproject.entity;
 
 import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
+import java.util.Set;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -12,10 +16,15 @@ import javax.persistence.*;
 public class User {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
-    @Column(name="id") private long id;
+    @GeneratedValue(generator = "u")
+    @GenericGenerator(name = "u", strategy = "org.hibernate.id.UUIDGenerator")
+    @Column(name="id", columnDefinition = "BINARY(16)") private UUID id;
     @Column(name="firstName") private String firstName;
     @Column(name="lastName") private String lastName;
     @Column(name="email") private String email;
     @Column(name="password")private String password;
+
+    @OneToMany(mappedBy="user")
+    private Set<Task> todos;
+
 }

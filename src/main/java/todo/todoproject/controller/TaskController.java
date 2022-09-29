@@ -33,7 +33,7 @@ public class TaskController {
         return taskRepository.save(newTask);
     }
 
-    @CrossOrigin
+    @CrossOrigin(origins = "http://localhost:5500")
     @DeleteMapping("tasks/delete/{id}")
     public void deleteTask (@PathVariable(name="id") UUID id){
         taskRepository.deleteById(id);
@@ -44,12 +44,15 @@ public class TaskController {
     @CrossOrigin
     @PutMapping("tasks/update/{id}")
     public Task updateTask (@PathVariable(name="id") UUID id, @RequestBody Task newTask){
-        Task updatedTask = taskRepository.findById(id).get();
-        updatedTask.setTask(newTask.getTask());
-        updatedTask.setNotes(newTask.getNotes());
-        updatedTask.setStatus(newTask.isStatus());
 
-        return taskRepository.save(updatedTask);
+        if(taskRepository.findById(id).isPresent()){
+            Task updatedTask = taskRepository.findById(id).get();
+            updatedTask.setTask(newTask.getTask());
+            updatedTask.setNotes(newTask.getNotes());
+            updatedTask.setStatus(newTask.isStatus());
+            return taskRepository.save(updatedTask);
+        }
+        return null;
         }
 
 }
