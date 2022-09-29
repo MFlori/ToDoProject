@@ -4,6 +4,8 @@ import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -24,7 +26,7 @@ public class User {
     @Column(name="email") private String email;
     @Column(name="password")private String password;
 
-    @OneToMany(mappedBy="user")
-    private Set<Task> todos;
+    @OneToMany(mappedBy="user", cascade = CascadeType.PERSIST)
+    private List<Task> todos = new ArrayList<>();
 
 }

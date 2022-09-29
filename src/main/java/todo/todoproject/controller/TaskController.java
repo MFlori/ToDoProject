@@ -3,7 +3,9 @@ package todo.todoproject.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import todo.todoproject.entity.Task;
+import todo.todoproject.entity.User;
 import todo.todoproject.repository.TaskRepository;
+import todo.todoproject.repository.UserRepository;
 import todo.todoproject.secureInput.SecureInput;
 
 import java.util.*;
@@ -15,21 +17,31 @@ public class TaskController {
     @Autowired
     private TaskRepository taskRepository;
 
-    @CrossOrigin
-    @GetMapping("/tasks")
-    public List<Task> getAllTasks() {
+    @Autowired
+    private UserRepository userRepo;
 
-        List<Task> allTasks = taskRepository.findAll();
+    @CrossOrigin
+    @GetMapping("/tasks/{userID}")
+    public List<Task> getAllTasks(@PathVariable(name="userID") UUID userID) {
+
+
+        User user = userRepo.findById(userID).orElse(new User());
+        List<Task> allTasks = taskRepository.findTasksByUser(user);
         Collections.sort(allTasks);
 
         return allTasks;
     }
 
     @CrossOrigin
-    @PostMapping("/tasks")
-    Task newTask(@RequestBody Task newTask) {
+    @PostMapping("/tasks/{userID}")
+    Task newTask(@RequestBody Task newTask,@PathVariable(name="userID") UUID userID) {
+
+        User x = userRepo.findById(userID).orElse(new User());
+
         SecureInput.checkInput(newTask); //checking for html input and removing char '<'
+
         newTask.setDateCreated(new Date());
+        newTask.setUser(x);
         return taskRepository.save(newTask);
     }
 

@@ -1,5 +1,6 @@
 package todo.todoproject.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
@@ -22,6 +23,7 @@ public class Task implements Serializable , Comparable<Task>{
     @Column(name="notes") private String notes;
     @Column(name="status") private boolean status;
     @Column(name="dateCreated") private Date dateCreated;
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "fk_user") private User user;
 
