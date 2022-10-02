@@ -14,6 +14,10 @@ tech-stack frontend:
               Bootstrap 5
               (plain) JavaScript
 
+development environment:
+              VS Code (frontend)
+              IntelliJ (backend)
+
 
               
               
